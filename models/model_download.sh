@@ -18,7 +18,7 @@ if [[ "$MODEL" != *.gguf ]]; then
 fi
 
 MODEL_NAME="${REPO##*/}"
-DEST="/local/models/gguf/${MODEL_NAME}"
+DEST="$( dirname "${BASH_SOURCE[0]}" )/models/gguf/${MODEL_NAME}"
 
 if ! command -v hf >/dev/null 2>&1; then
     echo "Error: Hugging Face CLI not found."

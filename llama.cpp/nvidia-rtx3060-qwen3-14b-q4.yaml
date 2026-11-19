@@ -9,7 +9,7 @@ services:
       - "127.0.0.1:8080:8080"
 
     volumes:
-      - /local/models/gguf:/models:ro
+      - ../models/gguf:/models:ro
 
     deploy:
       resources:
@@ -21,7 +21,7 @@ services:
 
     command:
       - -m
-      - /models/Qwen3-14B-GGUF/Qwen3-14B-Q3_K_M.gguf
+      - /models/Qwen3-14B-GGUF/Qwen3-14B-Q4_K_M.gguf
       - --host
       - 0.0.0.0
       - --port
@@ -34,9 +34,9 @@ services:
       - "32768"
       - --jinja
       - -ctk
-      - q8_0
+      - q4_0
       - -ctv
-      - q8_0
+      - q4_0
 
   autocomplete:
     image: ghcr.io/ggml-org/llama.cpp:server-cuda
@@ -46,7 +46,7 @@ services:
       - "127.0.0.1:8082:8082"
 
     volumes:
-      - /local/models/gguf:/models:ro
+      - ../models/gguf:/models:ro
 
     deploy:
       resources:
@@ -72,5 +72,11 @@ services:
       - "1"
       - -fa
       - "on"
+      - --jinja
+      - -ctk
+      - q6_0
+      - -ctv
+      - q4_0
+
 
 
