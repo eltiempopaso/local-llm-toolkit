@@ -1,0 +1,76 @@
+
+services:
+  llama:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    container_name: llama-server
+    restart: unless-stopped
+
+    ports:
+      - "127.0.0.1:8080:8080"
+
+    volumes:
+      - /local/models/gguf:/models:ro
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+    command:
+      - -m
+      - /models/Qwen3-14B-GGUF/Qwen3-14B-Q3_K_M.gguf
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8080"
+      - --alias
+      - qwen3-14b-q3
+      - -ngl
+      - "99"
+      - -c
+      - "32768"
+      - --jinja
+      - -ctk
+      - q8_0
+      - -ctv
+      - q8_0
+
+  autocomplete:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    container_name: llama-autocomplete
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8082:8082"
+
+    volumes:
+      - /local/models/gguf:/models:ro
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+
+    command:
+      - -m
+      - /models/Qwen2.5-Coder-1.5B-GGUF/Qwen2.5-Coder-1.5B-Q3_K_M.gguf
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8082"
+      - -ngl
+      - "99"
+      - -c
+      - "1024"
+      - -np
+      - "1"
+      - -fa
+      - "on"
+
+
