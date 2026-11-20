@@ -1,54 +1,54 @@
 #!/bin/bash
 
-# Uso: ./llama.sh [config] [action]
-# Ejemplo: ./llama.sh nvidia-rtx3060-qwen3-14b-q4 start
+# Usage: ./llama.sh [config] [action]
+# Example: ./llama.sh nvidia-rtx3060-qwen3-14b-q4 start
 
-# Verificar que se pasen 0 o 2 argumentos
+# Check if 0 or 2 arguments are passed
 if [ "$#" -eq 0 ]; then
-  echo "Configuraciones válidas:"
-    for file in $( dirname "${BASH_SOURCE[0]}" )/llama.cpp/*.yaml; do
-        echo "$(basename "$file" .yaml)"
-    done
+  echo "Valid configurations:"
+  for file in $( dirname "${BASH_SOURCE[0]}" )/llama.cpp/*.yaml; do
+    echo "$(basename "$file" .yaml)"
+  done
   exit 0
 elif [ "$#" -ne 2 ]; then
-  echo "Uso: $0 <nombre_configuracion> <accion>"
-  echo "Acciones válidas: start, stop, status, logs"
+  echo "Usage: $0 <configuration_name> <action>"
+  echo "Valid actions: start, stop, status, logs"
   exit 1
 fi
 
 CONFIG_NAME="$1"
 ACTION="$2"
 
-# Construir la ruta del archivo YAML
+# Construct the path to the YAML file
 YAML_PATH="$( dirname "${BASH_SOURCE[0]}" )/llama.cpp/"
 YAML_FILE="${YAML_PATH}${CONFIG_NAME}.yaml"
 
-# Verificar que el archivo YAML exista
+# Check if the YAML file exists
 if [ ! -f "$YAML_FILE" ]; then
-  echo "Error: El archivo $YAML_FILE no existe."
+  echo "Error: The file $YAML_FILE does not exist."
   exit 1
 fi
 
-# Ejecutar según la acción
+# Execute based on the action
 case "$ACTION" in
   start)
-    echo "Iniciando configuración: $CONFIG_NAME"
+    echo "Starting configuration: $CONFIG_NAME"
     docker compose -f "$YAML_FILE" up -d
     ;;
   stop)
-    echo "Deteniendo configuración: $CONFIG_NAME"
+    echo "Stopping configuration: $CONFIG_NAME"
     docker compose -f "$YAML_FILE" down
     ;;
   status)
-    echo "Estado de la configuración: $CONFIG_NAME"
+    echo "Status of configuration: $CONFIG_NAME"
     docker compose -f "$YAML_FILE" ps
     ;;
   logs)
-    echo "Mostrando logs de la configuración: $CONFIG_NAME"
+    echo "Showing logs for configuration: $CONFIG_NAME"
     docker compose -f "$YAML_FILE" logs -f
     ;;
   *)
-    echo "Acción desconocida: $ACTION. Use: start, stop, status, logs."
+    echo "Unknown action: $ACTION. Use: start, stop, status, logs."
     exit 1
     ;;
 esac
