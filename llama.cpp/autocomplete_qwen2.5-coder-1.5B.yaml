@@ -1,0 +1,44 @@
+
+services:
+  autocomplete:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    container_name: llama-autocomplete
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8082:8082"
+
+    volumes:
+      - ../models/gguf:/models:ro
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+
+    command:
+      - -m
+      - /models/Qwen2.5-Coder-1.5B-GGUF/Qwen2.5-Coder-1.5B-Q3_K_M.gguf
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8082"
+      - -ngl
+      - "99"
+      - -c
+      - "1024"
+      - -np
+      - "1"
+      - -fa
+      - "on"
+      - --jinja
+      - -ctk
+      - q6_0
+      - -ctv
+      - q4_0
+
+
+
