@@ -1,0 +1,58 @@
+name: Chess Station Local
+version: 1.0.0
+schema: v1
+
+models:
+  # Edición de código, Chat y Agent Mode (~5.5 - 7 GB VRAM con contexto 16k)
+  #- name: Qwen 2.5 Coder 7B
+  #- name: Qwen 3.5 9B
+  #- name: Qwen 2.5 Coder 14B
+  - name: deepseek coder v2 16b
+    provider: ollama
+    #model: qwen3.5:9b
+    #model: qwen2.5-coder:7b
+    #model: qwen2.5-coder:14b
+    model: deepseek-coder-v2:16b
+    roles:
+      - chat
+      - edit
+      - apply
+    capabilities:
+      - tool_use
+    defaultCompletionOptions:
+      contextLength: 16384
+      #contextLength: 8192
+      # contextLength: 4096
+      #contextLength: 6144
+      maxTokens: 4096
+      temperature: 0.2
+
+  # Autocompletado rápido en tiempo real (~1.5 GB VRAM)
+  - name: Qwen Coder 1.5B
+    provider: ollama
+    model: qwen2.5-coder:1.5b
+    roles:
+      - autocomplete
+    autocompleteOptions:
+      debounceDelay: 250
+      maxPromptTokens: 1024
+      onlyMyCode: true
+    defaultCompletionOptions:
+      contextLength: 2048
+      maxTokens: 128
+
+  # Embeddings para indexación local del codebase (~0.3 GB VRAM)
+  - name: Nomic Embed
+    provider: ollama
+    model: nomic-embed-text
+    roles:
+      - embed
+
+context:
+  - provider: code
+  - provider: docs
+  - provider: diff
+  - provider: terminal
+  - provider: problems
+  - provider: folder
+  - provider: codebase

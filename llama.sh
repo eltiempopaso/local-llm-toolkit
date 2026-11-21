@@ -19,6 +19,7 @@ fi
 CONFIG_NAME="$1"
 ACTION="$2"
 
+
 # Construct the path to the YAML file
 YAML_PATH="$( dirname "${BASH_SOURCE[0]}" )/llama.cpp/"
 YAML_FILE="${YAML_PATH}${CONFIG_NAME}.yaml"

@@ -1,0 +1,47 @@
+
+name: Chess Station Local
+version: 1.0.0
+schema: v1
+
+models:
+  #- name: Qwen3 14B Agent
+  - name: Qwen2.5 Coder 14B Instruct
+    provider: openai
+    #model: qwen3-14b-q3
+    model: qwen2.5-coder-14b-q4
+    apiBase: http://localhost:8080/v1
+    apiKey: not-needed
+
+    roles:
+      - chat
+      - edit
+      - apply
+
+    capabilities:
+      - tool_use
+
+    defaultCompletionOptions:
+      contextLength: 32768
+      maxTokens: 8192
+
+  - name: Qwen2.5 Coder Autocomplete
+    provider: openai
+    model: qwen2.5-coder-1.5b
+    apiBase: http://localhost:8082/v1
+    apiKey: not-needed
+
+    roles:
+      - autocomplete
+
+    defaultCompletionOptions:
+      contextLength: 2048
+      maxTokens: 128
+      temperature: 0.1
+      stop:
+        - "<|fim_suffix|>"
+
+    autocompleteOptions:
+      debounceDelay: 350
+      maxPromptTokens: 1024
+      modelTimeout: 3000
+      transform: true
