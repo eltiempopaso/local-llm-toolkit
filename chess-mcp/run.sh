@@ -8,7 +8,7 @@ if docker container inspect "$container_name" >/dev/null 2>&1; then
   running=$(docker container inspect --format '{{.State.Running}}' "$container_name")
   if [ "$running" = "true" ]; then
     if ! docker network inspect "$network_name" >/dev/null 2>&1; then
-      printf "No existe la red Docker %s; no se puede conectar %s.\n" "$network_name" "$container_name" >&2
+      printf "Docker network %s does not exist; cannot connect %s.\n" "$network_name" "$container_name" >&2
       exit 1
     fi
 
@@ -19,7 +19,7 @@ if docker container inspect "$container_name" >/dev/null 2>&1; then
       docker network connect "$network_name" "$container_name"
     fi
 
-    printf "El contenedor %s ya está en ejecución.\n" "$container_name"
+    printf "Container %s is already running.\n" "$container_name"
     exit 0
   fi
 
@@ -27,7 +27,7 @@ if docker container inspect "$container_name" >/dev/null 2>&1; then
 fi
 
 if ! docker network inspect "$network_name" >/dev/null 2>&1; then
-  printf "No existe la red Docker %s; inicia primero el stack que la crea.\n" "$network_name" >&2
+  printf "Docker network %s does not exist; start the stack that creates it first.\n" "$network_name" >&2
   exit 1
 fi
 

@@ -7,9 +7,9 @@ if running=$(docker container inspect --format '{{.State.Running}}' "$container_
     if [ "$running" = "true" ]; then
         docker stop "$container_name"
     else
-        printf "El contenedor %s ya está detenido.\n" "$container_name"
+        printf "Container %s is already stopped.\n" "$container_name"
     fi
 else
-    printf "No se pudo consultar el contenedor %s; comprueba que Docker esté disponible.\n" "$container_name" >&2
+    printf "Could not inspect container %s; check that Docker is available.\n" "$container_name" >&2
     exit 1
 fi

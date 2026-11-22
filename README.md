@@ -1,22 +1,22 @@
 local-llm-toolkit
-Este repositorio contiene scripts y configuraciones para trabajar con modelos de lenguaje de inteligencia artificial en entornos locales. Está diseñado para facilitar la instalación, ejecución y gestión de modelos como llama.cpp o otros proyectos de IA en una máquina local o en contenedores Docker.
+This repository contains scripts and configurations for working with AI language models locally. It is designed to simplify installing, running, and managing models such as llama.cpp and other AI projects on a local machine or in Docker containers.
 
-✅ Características principales
-Scripts para instalar dependencias y configurar entornos.
-Configuraciones para ejecutar modelos de lenguaje en CPU/GPU (ej: llama.cpp).
-Guías para usar modelos locales con Docker o directamente en la terminal.
-Ejemplos de cómo interactuar con modelos (ej: generar texto, ajustar parámetros, etc.).
-🚀 Comenzando
-1. Requisitos
-Docker (opcional, pero recomendado).
-Python 3.8 o superior.
-Un modelo de lenguaje compatible (ej: ggml para llama.cpp).
-2. Clonar el repositorio
+✅ Key features
+Scripts for installing dependencies and configuring environments.
+Configurations for running language models on CPU/GPU (e.g., llama.cpp).
+Guides for using local models with Docker or directly from the terminal.
+Examples of interacting with models (e.g., generating text, tuning parameters, etc.).
+🚀 Getting started
+1. Requirements
+Docker (optional, but recommended).
+Python 3.8 or later.
+A compatible language model (e.g., GGML for llama.cpp).
+2. Clone the repository
 Run
-git clone https://github.com/tu-usuario/local-llm-toolkit.git
+git clone https://github.com/your-user/local-llm-toolkit.git
 cd local-llm-toolkit
-3. Ejecutar con Docker (si aplica)
-Asegúrate de tener un archivo docker-compose.yml (ej: para llama.cpp):
+3. Run with Docker (if applicable)
+Make sure you have a docker-compose.yml file (e.g., for llama.cpp):
 
 Apply
 version: '3'
@@ -29,45 +29,45 @@ services:
       - ./models:/models
     environment:
       - MODEL_PATH=/models/model.bin
-Inicia el contenedor:
+Start the container:
 Run
 docker compose up -d
-Accede al servicio en http://localhost:8080.
-4. Uso directo (sin Docker)
-Ejecuta scripts en la carpeta scripts/ para configurar y correr modelos.
-Ejemplo: ./scripts/run_llama.sh --model models/model.bin
-📁 Estructura del repositorio
+Access the service at http://localhost:8080.
+4. Run directly (without Docker)
+Run scripts in the scripts/ directory to configure and start models.
+Example: ./scripts/run_llama.sh --model models/model.bin
+📁 Repository structure
 
 Apply
 local-llm-toolkit/
-├── README.md          # Este archivo
-├── docker-compose.yml # Configuración para Docker (ej: llama.cpp)
-├── models/            # Directorio para almacenar modelos (.bin, .ggml, etc.)
-├── scripts/           # Scripts para ejecutar y gestionar modelos
+├── README.md          # This file
+├── docker-compose.yml # Docker configuration (e.g., llama.cpp)
+├── models/            # Directory for storing models (.bin, .ggml, etc.)
+├── scripts/           # Scripts for running and managing models
 │   ├── run_llama.sh
 │   └── install_deps.sh
-├── config/            # Archivos de configuración personalizados
-└── docs/              # Documentación adicional (opcional)
-🛠️ Consejos útiles
-Modelos: Descarga modelos compatibles (ej: desde TheBloke) y colócalos en models/.
-Rendimiento: Usa --threads para ajustar el número de hilos en scripts.
-Logs: Revisa logs de Docker con docker logs -f llama.
-Actualizaciones: Si modificas el código, reconstruye la imagen con docker compose build.
-📚 Documentación adicional
-Guía de llama.cpp
-Docker Compose docs
+├── config/            # Custom configuration files
+└── docs/              # Additional documentation (optional)
+🛠️ Tips
+Models: Download compatible models (e.g., from TheBloke) and place them in models/.
+Performance: Use --threads to adjust the number of threads in scripts.
+Logs: View Docker logs with docker logs -f llama.
+Updates: If you modify the code, rebuild the image with docker compose build.
+📚 Additional documentation
+llama.cpp guide
+Docker Compose documentation
 
-♟️ Servidor MCP de ajedrez
-El servidor de `chess-mcp/` expone herramientas para generar una imagen del tablero y gestionar posiciones FEN con `python-chess`: convertir PGN a FEN, aplicar jugadas SAN, validar posiciones, consultar jugadas legales, convertir SAN/UCI, revisar el estado de la partida, mostrar el tablero ASCII, resumir posiciones, contar material y listar capturas. Las tools `analyze_position`, `best_move` y `evaluate_position` usan Stockfish y devuelven evaluación desde la perspectiva de blancas y del turno actual; `analyze_position` también devuelve variantes principales en SAN y UCI.
+♟️ Chess MCP server
+The `chess-mcp/` server exposes five tools: `render_board_image`, `pgn_to_position`, `play_moves`, `inspect_position`, and `stockfish_analyze`. `inspect_position` combines validity, game status, material, and optionally legal moves and an ASCII board. `play_moves` applies a sequence in SAN or UCI and returns both notations. `stockfish_analyze` offers `evaluation`, `best_move`, and `variations` modes, with scores from White's and the side-to-move perspectives.
 
-El análisis está limitado por defecto a profundidad 12 y 2 segundos. Se puede ajustar la profundidad (1-30) y el tiempo máximo (0,1-10 segundos); en `analyze_position`, `multipv` controla el número de variantes (1-5). El análisis se detiene al alcanzar primero el límite de profundidad o de tiempo.
+Analysis defaults to depth 12 and 2 seconds. You can adjust the depth (1-30) and time limit (0.1-10 seconds); `multipv` controls the number of variations (1-5). Analysis stops when either the depth or time limit is reached.
 
-Si se pregunta por la evaluación, puntuación o ventaja según Stockfish, el servidor instruye al modelo para que use `stockfish_evaluation` (también está disponible `evaluate_position`). Para la mejor jugada, usa `best_move`; para varias líneas o variantes, `analyze_position`. Estas herramientas requieren un FEN o una secuencia de jugadas que identifique la posición.
+For questions about Stockfish evaluations, scores, advantages, best moves, or analysis, use `stockfish_analyze` with the appropriate mode. Position tools require a FEN or a sequence of moves that identifies the position.
 
-Para construir, ejecutar y detener el servidor, usa los scripts `chess-mcp/build.sh`, `chess-mcp/run.sh` y `chess-mcp/stop.sh`. `run.sh` conecta el contenedor a la red Docker `searxng_default` para que Open WebUI pueda resolverlo por el nombre `chess-mcp:8000`; esa red debe existir previamente. Si el contenedor ya está en ejecución, el script lo conecta a la red si hace falta; si está detenido, lo reemplaza por uno creado desde la imagen actual. En una ejecución directa, instala `chess-mcp/requirements.txt` y ejecuta `python chess-mcp/server.py`.
+To build, run, and stop the server, use `chess-mcp/build.sh`, `chess-mcp/run.sh`, and `chess-mcp/stop.sh`. `run.sh` connects the container to the Docker network `searxng_default`, allowing Open WebUI to resolve it as `chess-mcp:8000`; the network must already exist. If the container is running, the script connects it to the network if needed; if it is stopped, the script replaces it with a container created from the current image. For direct execution, install `chess-mcp/requirements.txt` and run `python chess-mcp/server.py`.
 
-🤝 Contribuciones
-¡Cualquier mejora, script o corrección es bienvenida! Fork el repositorio y crea un PR.
+🤝 Contributions
+Improvements, scripts, and fixes are welcome! Fork the repository and create a PR.
 
-📌 Licencia
-Este proyecto está bajo la licencia MIT. Modifica según tus necesidades.
+📌 License
+This project is licensed under the MIT License. Modify it to suit your needs.
