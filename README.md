@@ -56,6 +56,16 @@ Actualizaciones: Si modificas el código, reconstruye la imagen con docker compo
 📚 Documentación adicional
 Guía de llama.cpp
 Docker Compose docs
+
+♟️ Servidor MCP de ajedrez
+El servidor de `chess-mcp/` expone herramientas para generar una imagen del tablero y gestionar posiciones FEN con `python-chess`: convertir PGN a FEN, aplicar jugadas SAN, validar posiciones, consultar jugadas legales, convertir SAN/UCI, revisar el estado de la partida, mostrar el tablero ASCII, resumir posiciones, contar material y listar capturas. Las tools `analyze_position`, `best_move` y `evaluate_position` usan Stockfish y devuelven evaluación desde la perspectiva de blancas y del turno actual; `analyze_position` también devuelve variantes principales en SAN y UCI.
+
+El análisis está limitado por defecto a profundidad 12 y 2 segundos. Se puede ajustar la profundidad (1-30) y el tiempo máximo (0,1-10 segundos); en `analyze_position`, `multipv` controla el número de variantes (1-5). El análisis se detiene al alcanzar primero el límite de profundidad o de tiempo.
+
+Si se pregunta por la evaluación, puntuación o ventaja según Stockfish, el servidor instruye al modelo para que use `stockfish_evaluation` (también está disponible `evaluate_position`). Para la mejor jugada, usa `best_move`; para varias líneas o variantes, `analyze_position`. Estas herramientas requieren un FEN o una secuencia de jugadas que identifique la posición.
+
+Para construir, ejecutar y detener el servidor, usa los scripts `chess-mcp/build.sh`, `chess-mcp/run.sh` y `chess-mcp/stop.sh`. `run.sh` conecta el contenedor a la red Docker `searxng_default` para que Open WebUI pueda resolverlo por el nombre `chess-mcp:8000`; esa red debe existir previamente. Si el contenedor ya está en ejecución, el script lo conecta a la red si hace falta; si está detenido, lo reemplaza por uno creado desde la imagen actual. En una ejecución directa, instala `chess-mcp/requirements.txt` y ejecuta `python chess-mcp/server.py`.
+
 🤝 Contribuciones
 ¡Cualquier mejora, script o corrección es bienvenida! Fork el repositorio y crea un PR.
 
