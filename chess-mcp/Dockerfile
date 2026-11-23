@@ -13,6 +13,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY server.py fen_tools.py .
+COPY skills/ ./skills/
 
 ENV STOCKFISH_PATH=/usr/games/stockfish
 

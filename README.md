@@ -58,7 +58,9 @@ llama.cpp guide
 Docker Compose documentation
 
 ♟️ Chess MCP server
-The `chess-mcp/` server exposes five tools: `render_board_image`, `pgn_to_position`, `play_moves`, `inspect_position`, and `stockfish_analyze`. `inspect_position` combines validity, game status, material, and optionally legal moves and an ASCII board. `play_moves` applies a sequence in SAN or UCI and returns both notations. `stockfish_analyze` offers `evaluation`, `best_move`, and `variations` modes, with scores from White's and the side-to-move perspectives.
+The `chess-mcp/` server exposes seven tools: `list_skills`, `get_skill`, `render_board_image`, `pgn_to_position`, `play_moves`, `inspect_position`, and `stockfish_analyze`. `list_skills` returns the available skill names and descriptions; `get_skill` loads a skill's Markdown instructions. `inspect_position` combines validity, game status, material, and optionally legal moves and an ASCII board. `play_moves` applies a sequence in SAN or UCI and returns both notations. `stockfish_analyze` offers `evaluation`, `best_move`, and `variations` modes, with scores from White's and the side-to-move perspectives.
+
+The server provides the `analyze_position` skill at `chess-mcp/skills/analyze_position.md`. For position analysis, evaluation, or move recommendations, the model should call the `get_skill` tool with `name="analyze_position"` and follow the returned workflow before using the chess tools. The server instructions describe the available skill and when to load it; the Markdown is bundled in the Docker image.
 
 Analysis defaults to depth 12 and 2 seconds. You can adjust the depth (1-30) and time limit (0.1-10 seconds); `multipv` controls the number of variations (1-5). Analysis stops when either the depth or time limit is reached.
 
