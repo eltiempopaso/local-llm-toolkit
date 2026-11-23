@@ -1,0 +1,39 @@
+
+services:
+  llama:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    container_name: llama-server
+    restart: unless-stopped
+
+    ports:
+      - "127.0.0.1:8080:8080"
+
+    volumes:
+      - ../models/gguf:/models:ro
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+    command:
+      - -m
+      - /models/Qwen3.5-9B-GGUF/Qwen3.5-9B-Q6_K.gguf
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8080"
+      - --alias
+      - qwen3.5-9b-q6
+      - -ngl
+      - "99"
+      - -c
+      - "262144"
+      - --jinja
+      - -ctk
+      - q4_0
+      - -ctv
+      - q4_0

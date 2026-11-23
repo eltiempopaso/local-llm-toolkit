@@ -1,0 +1,41 @@
+
+services:
+  llama:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    container_name: llama-server
+    restart: unless-stopped
+
+    ports:
+      - "127.0.0.1:8080:8080"
+
+    volumes:
+      - ../models/gguf:/models:ro
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+    command:
+      - -m
+      - /models/gemma-4-12B-it-GGUF/gemma-4-12B-it-Q4_0.gguf
+      - --mmproj
+      - /models/gemma-4-12B-it-GGUF/mmproj-gemma-4-12B-it-Q8_0.gguf
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8080"
+      - --alias
+      - gemma-4-12b-it-q4_0
+      - -ngl
+      - "99"
+      - -c
+      - "262144"
+      - --jinja
+      - -ctk
+      - q4_0
+      - -ctv
+      - q4_0
