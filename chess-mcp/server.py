@@ -20,12 +20,12 @@ logger = logging.getLogger(__name__)
 P = ParamSpec("P")
 R = TypeVar("R")
 
-ANALYZE_POSITION_SKILL_PATH = (
-    Path(__file__).parent / "skills" / "analyze_position.md"
+GUIDE_ANALYSIS_POSITION_SKILL_PATH = (
+    Path(__file__).parent / "skills" / "guide_analysis_position.md"
 )
 SKILLS = {
-    "analyze_position": (
-        ANALYZE_POSITION_SKILL_PATH,
+    "guide_analysis_position": (
+        GUIDE_ANALYSIS_POSITION_SKILL_PATH,
         "Workflow for validating a chess position, selecting Stockfish "
         "analysis, and interpreting its evaluation.",
     ),
@@ -72,11 +72,11 @@ mcp = FastMCP(
         "'variations' to compare lines. Never invent evaluations. You need a FEN "
         "or moves that identify the position; ask for them if they are missing. "
         "The score fields indicate their perspective. Available skill: "
-        "'analyze_position' provides the workflow for validating a position, "
+        "'guide_analysis_position' provides the workflow for validating a position, "
         "choosing an analysis mode, and interpreting scores. When a user asks "
         "for specialized workflows, call list_skills to discover available "
         "skills. For position analysis, evaluation, or best move, call "
-        "get_skill(name='analyze_position'), follow that methodology, then use "
+        "get_skill(name='guide_analysis_position'), follow that methodology, then use "
         "the chess tools."
     ),
     transport_security=TransportSecuritySettings(
@@ -205,7 +205,7 @@ def stockfish_analyze(
 
     This is the single Stockfish tool. Call it for questions about evaluation,
     score, advantage, who is better, best move, or engine analysis.
-    For position analysis, first load and follow the "analyze_position" skill
+    For position analysis, first load and follow the "guide_analysis_position" skill
     with get_skill.
 
     Args:
