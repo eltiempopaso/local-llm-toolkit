@@ -81,7 +81,12 @@ mcp = FastMCP(
     ),
     transport_security=TransportSecuritySettings(
         enable_dns_rebinding_protection=True,
-        allowed_hosts=["chess-mcp:8000"],
+        allowed_hosts=[
+        "chess-mcp:8000",
+        "localhost:8000",
+        "127.0.0.1:8000",
+        "host.docker.internal:8000",
+    ],
     ),
 )
 

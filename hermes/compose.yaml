@@ -1,0 +1,29 @@
+
+services:
+  hermes:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes
+    restart: unless-stopped
+    command: gateway run
+
+    ports:
+      - "127.0.0.1:8643:8642"
+
+    environment:
+      SEARXNG_URL: http://searxng:8080
+
+    volumes:
+      - ./data/hermes:/opt/data
+      - ./workspace:/workspace
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    networks:
+      - default
+      - searxng
+
+networks:
+  searxng:
+    external: true
+    name: searxng_default

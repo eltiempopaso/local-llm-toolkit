@@ -1,1 +1,39 @@
 models/gguf/*
+
+
+#HERMES
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Hermes persistent data
+hermes/data/*
+!hermes/data/hermes/
+hermes/data/hermes/*
+!hermes/data/hermes/config.yaml
+hermes/backups/
+
+# Workspace
+hermes/workspace/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
